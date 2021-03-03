@@ -37,24 +37,24 @@
       alert('로그아웃!')
       window.location.href = '/'
     }
-    
-    function search_title(){
-        let title_input = $("#title_input").val();
-        if(title_input == ''){
-            alert("검색할 제목을 입력해주세요.")
-            return;
+
+    function search_title() {
+      let title_input = $("#title_input").val();
+      if (title_input == '') {
+        alert("검색할 제목을 입력해주세요.")
+        return;
+      }
+      event.preventDefault()
+      $.ajax({
+        type: "GET",
+        url: "/main",
+        data: {
+          "search_title": title_input
+        },
+        success: function (response) {
+          $("#search_cards").html(response)
         }
-        event.preventDefault()
-        $.ajax({
-            type:"GET",
-            url:"/main",
-            data:{
-                "search_title":title_input
-            },
-            success: function(response) {
-                $("#search_cards").html(response)
-            }
-        })
+      })
 
     }
   </script>
@@ -96,52 +96,54 @@
 
     <!-- Review Card List -->
     <div id="search_cards">
-    <div class="container-fluid p-3">
-      <div id="contents-box" class="row">
+      <div class="container-fluid p-3">
+        <div id="contents-box" class="row">
 
-        {% for netflix in netflixs %}
+          {% for netflix in netflixs %}
 
-        {%  set poster_path = netflix['net_poster'] %}
-        {%  set title = netflix['net_title'] %}
-        {%  set category = netflix['net_cate'] %}
-        {%  set rv_count = netflix['net_rv_count'] %}
+          {%  set poster_path = netflix['net_poster'] %}
+          {%  set title = netflix['net_title'] %}
+          {%  set category = netflix['net_cate'] %}
+          {%  set rv_count = netflix['net_rv_count'] %}
 
-        <div class="col-xl-3 col-lg-4 col-md-6 col-xs-12 my-2">
-          <div class="card">
+          <div class="col-xl-3 col-lg-4 col-md-6 col-xs-12 my-2">
+            <div class="card">
 
-            {%  set poster_path = netflix['net_poster'] %}
+              {%  set poster_path = netflix['net_poster'] %}
 
-            <div class="card-img-top poster" style="background-image: url({{poster_path}});">
-            </div>
-
-            <div class="card-body p-3">
-              <h5 class="card-title mb-3">{{title}}</h5>
-
-              {% if (category=="tv") %}
-              <p class="card-text mt-2">TV 시리즈</p>
-              {% endif %}
-
-              {% if (category=="mv") %}
-              <p class="card-text mt-2">영화</p>
-              {% endif %}
-
-              <div class="justify-content-between">
-                <div class="btn_box d-inline">
-                  <a href="#" class="btn btn-sm btn-primary">리뷰보기</a>
-                  <a href="/review/write/{{title}}" class="btn btn-sm btn-primary">리뷰작성</a>
-                </div>
-                <span class="review_count far fa-comment-alt"> {{rv_count}}</span>
+              <div class="card-img-top poster" style="background-image: url({{poster_path}});">
               </div>
+
+              <div class="card-body p-3">
+                <h5 class="card-title mb-3">{{title}}</h5>
+
+                {% if (category=="tv") %}
+                <p class="card-text mt-2">TV 시리즈</p>
+                {% endif %}
+
+                {% if (category=="mv") %}
+                <p class="card-text mt-2">영화</p>
+                {% endif %}
+
+                <div class="justify-content-between">
+                  <div class="btn_box d-inline">
+                    <a href="/review/list/{{title}}" class="btn btn-sm btn-primary">리뷰보기</a>
+                    <a href="/review/write/{{title}}" class="btn btn-sm btn-primary">리뷰작성</a>
+                  </div>
+                  <span class="review_count far fa-comment-alt"> {{rv_count}}</span>
+                </div>
+              </div>
+
             </div>
-
           </div>
+
+          {% endfor %}
+
         </div>
-
-        {% endfor %}
-
       </div>
     </div>
-    </div>
+
+  </div>
 
 </body>
 

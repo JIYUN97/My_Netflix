@@ -127,6 +127,50 @@ def review_write_page(title):
         return redirect(url_for("login_page", msg ="로그인 시간 만료!"))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login_page",msg = "로그인 정보 없음!"))
+
+@app.route('/review/writeOk/<title>', methods=['POST'])
+def review_write(title):
+    
+    # 리뷰 정보 받아오기
+    hashtag = request.form['hashtag']
+    visual = request.form['visual']
+    story = request.form['story']
+    funny = request.form['funny']
+    watch_again = request.form['watch_again']
+    review_text = request.form['review_text']
+
+    review = {
+        # 'rv_nick':nick,
+        'rv_hashtag':hashtag,
+        'rv_visual': visual, 
+        'rv_story': story, 
+        'rv_funny': funny, 
+        'rv_watch_again': watch_again, 
+        'rv_review': review_text, 
+        'rv_net_title': title
+    }
+
+    db.review.insert_one(review)
+
+    db.netflix.update_one({ "net_title": title }, { "$inc": { "net_rv_count": 1 } })
+
+    return redirect(url_for('review_list', title=title))
+
+@app.route('/review/list/<title>', methods=['GET'])
+def review_list(title):
+    # 1. DB에서 해당 Netflix 정보 모두 가져오기
+    netflix = db.netflix.find_one({'net_title': title}, {'_id': False})
+
+    # 2. DB에서 해당 Netflix 리뷰 목록 반환하기
+    reviews = db.reivew.find({'rv_net_title': title}, {'_id': False})
+
+    print(reviews)
+
+    # 3. Netflix 정보 & 리뷰 목록 반환하기
+    return render_template("review_list.html", netflix=netflix, reviews=reviews)
+
+
+        
         
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

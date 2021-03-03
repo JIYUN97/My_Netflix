@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <!-- Webpage Title -->
+  <title>My Netflx 리뷰 목록 | 항해99(16조)</title>
+
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <!-- Bootstrap Fontawesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://kit.fontawesome.com/c0c8dc8706.js" crossorigin="anonymous"></script>
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+  </script>
+
+  <!-- 구글폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
+
+  <style type="text/css">
+    * {
+      font-family: 'Nanum Gothic', sans-serif;
+    }
+
+    .poster {
+      height: 300px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .label-title {
+      width: 200px;
+      text-align: right;
+      padding-right: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    {%  set poster_path = netflix['net_poster'] %}
+    {%  set title = netflix['net_title'] %}
+    {%  set category = netflix['net_cate'] %}
+    {%  set runtime = netflix['net_runtime'] %}
+    {%  set genre = netflix['net_genre'] %}
+
+    <div class="row mt-5">
+      <a href="/main" class="btn btn-primary mx-3">뒤로가기</a>
+    </div>
+
+    <!-- Netflix Info -->
+    <div class="row m-5">
+      <div class="mr-3">
+        <img class="img-fluid rounded mb-4 mb-lg-0" src="{{poster_path}}" alt="">
+      </div>
+      <div class="p-3">
+        <h1 class="font-weight-light">{{title}}</h1>
+        <p>{{category}}</p>
+        <p>{{runtime}}</p>
+        <p>{{genre}}</p>
+      </div>
+    </div>
+
+    <div class="reviews">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">작성자</th>
+            <th scope="col">해시태그</th>
+          </tr>
+        </thead>
+        <tbody id="reviews-box">
+
+          <tr>
+            <td>김르탄</td>
+            <td>#룰루랄랄라</td>
+          </tr>
+
+          {% for review in reviews %}
+          {% set hashtag = review['rv_hashtag'] %}
+
+          <tr>
+            <td>김르탄</td>
+            <td>{{hashtag}}</td>
+          </tr>
+
+          {% endfor %}
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+
+</html>

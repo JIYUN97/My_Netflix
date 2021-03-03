@@ -40,12 +40,55 @@
       background-position: center;
     }
 
-    .rating-title {
+    .label-title {
       width: 200px;
       text-align: right;
       padding-right: 20px;
     }
   </style>
+
+  <script>
+    function write_review() {
+
+      var formData =  $("#write_review").serialize();
+
+
+      let username = $("#input-username").val()
+      let password = $("#input-password").val()
+  
+      if (username == "") {
+          $("#help-id-login").text("아이디를 입력해주세요.")
+          $("#input-username").focus()
+          return;
+      } else {
+          $("#help-id-login").text("")
+      }
+  
+      if (password == "") {
+          $("#help-password-login").text("비밀번호를 입력해주세요.")
+          $("#input-password").focus()
+          return;
+      } else {
+          $("#help-password-login").text("")
+      }
+      $.ajax({
+          type: "POST",
+          url: "/review/writeOk/{{title}}",
+          data: {
+              'hashtag':hashtag,
+              'visual': visual, 
+              'story': story, 
+              'funny': funny, 
+              'watch_again': watch_again, 
+              'review': review_text, 
+              'title': title
+          },
+          success: function (response) {
+              window.location.replace("/main");
+          }
+      });
+  }
+  </script>
 </head>
 
 <body>
@@ -57,15 +100,14 @@
     {%  set runtime = netflix['net_runtime'] %}
     {%  set genre = netflix['net_genre'] %}
 
+    <div class="row mt-5">
+      <a href="/main" class="btn btn-primary mx-3">뒤로가기</a>
+    </div>
+
     <!-- Netflix Info -->
     <div class="row m-5">
       <div class="mr-3">
-        {% if (poster_path!="") %}
-          <img class="img-fluid rounded mb-4 mb-lg-0" src="https://www.themoviedb.org/t/p/w300_and_h450_bestv2/pHcNHYPg0c2vg7qay6wjJoApUgS.jpg" alt="">
-        {% endif %}
-        {% if (poster_path=="") %}
-          <img class="img-fluid rounded mb-4 mb-lg-0" src="{{poster_path}}" alt="">
-        {% endif %}
+        <img class="img-fluid rounded mb-4 mb-lg-0" src="{{poster_path}}" alt="">
       </div>
       <div class="p-3">
         <h1 class="font-weight-light">{{title}}</h1>
@@ -76,70 +118,91 @@
     </div>
 
     <!-- 리뷰 작성 -->
-    <form class="review-form">
+    <form action="/review/writeOk/{{title}}" method="post" id="write_review" name="write_review" class="review-form">
 
       <div class="jumbotron jumbotron-fluid">
         <div class="px-5">
 
           <!-- 작성자 -->
-          <div class="mb-3 row">
-            <label for="staticNick" class="col-sm-2 col-form-label">작성자</label>
-            <div class="col-sm-10">
-              <input type="text" readonly class="form-control-plaintext" id="staticNick" value={{nick}}>
+          <div class="mx-3 row">
+            <label for="nick" class="col-2 col-form-label label-title">작성자</label>
+            <div class="col-10">
+              <p id="nick" name="nick" class="form-control-plaintext">{{nick}}</p>
             </div>
           </div>
 
           <!-- 해시태그 -->
-          <div class="mb-3 row">
-            <label for="inputHashtag" class="col-sm-2 col-form-label">나만의 해시태그</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputHashtag">
+          <div class="mx-3 my-4 row align-items-center">
+            <label for="hashtag" class="col-2 col-form-label label-title">나만의 해시태그</label>
+            <div class="col-8">
+              <input id="hashtag" name="hashtag" class="form-control">
             </div>
           </div>
 
           <!-- 별점 -->
-          <div class="mb-3 row">
+          <div class="mx-5 mb-4 px-5 row">
+
             <div class="col-6">
-              <div>
-                <label for="visual" class="control-label rating-title">영상미</label>
-                <input id="visual" name="visual" class="rating rating-loading" data-min="0" data-max="5" data-step="1"
-                  value="">
+              <!-- 영상미 -->
+              <div class="py-3 row align-items-center justify-content-end">
+                <label for="visual" class="col-4 control-label label-title">영상미</label>
+                <div class="col-8">
+                  <input id="visual" name="visual" class="form-control rating rating-loading" data-min="0" data-max="5"
+                    data-step="1" value="">
+                </div>
               </div>
-              <div>
-                <label for="story" class="control-label rating-title">스토리</label>
-                <input id="story" name="story" class="rating rating-loading" data-min="0" data-max="5" data-step="1"
-                  value="">
+              <!-- 스토리 -->
+              <div class="py-3 row align-items-center justify-content-end">
+                <label for="story" class="col-4 control-label label-title">스토리</label>
+                <div class="col-8">
+                  <input id="story" name="story" class="form-control rating rating-loading" data-min="0" data-max="5"
+                    data-step="1" value="">
+                </div>
               </div>
             </div>
+
             <div class="col-6">
-              <div>
-                <label for="funny" class="control-label rating-title">재미</label>
-                <input id="funny" name="funny" class="rating rating-loading" data-min="0" data-max="5" data-step="1"
-                  value="">
+              <!-- 재미 -->
+              <div class="py-3 row align-items-center">
+                <label for="story" class="col-4 control-label label-title">재미</label>
+                <div class="col-8">
+                  <input id="funny" name="funny" class="form-control rating rating-loading" data-min="0" data-max="5"
+                    data-step="1" value="">
+                </div>
               </div>
-              <div>
-                <label for="watch_again" class="control-label rating-title">다시 볼 의향</label>
-                <input id="watch_again" name="watch_again" class="rating rating-loading" data-min="0" data-max="5"
-                  data-step="1" value="">
+              <!-- 다시 볼 의향 -->
+              <div class="py-3 row align-items-center">
+                <label for="story" class="col-4 control-label label-title">다시 볼 의향</label>
+                <div class="col-8">
+                  <input id="watch_again" name="watch_again" class="form-control rating rating-loading" data-min="0"
+                    data-max="5" data-step="1" value="">
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- 리뷰 -->
-          <div class="form-group">
-            <textarea class="form-control" id="content" rows="3" placeholder="내용 입력"></textarea>
           </div>
+          <!-- End of 별점 -->
 
+        </div>
+
+        <!-- 리뷰 -->
+        <div class="mx-5 mb-4">
+          <div class="px-5 form-group row">
+            <textarea id="review_text" name="review_text" class="p-3 form-control" rows="5" placeholder="리뷰를 작성하세요"></textarea>
+          </div>
         </div>
       </div>
 
-      <!-- 취소/작성 버튼-->
-      <div class="text-center mb-5">
-        <button type="reset" class="btn btn-primary">취소하기</button>
-        <button type="submit" class="btn btn-primary">작성하기</button>
-      </div>
+  </div>
+  </div>
 
-    </form>
+  <!-- 취소/작성 버튼-->
+  <div class="text-center mb-5">
+    <button type="reset" class="btn btn-primary mx-3">취소하기</button>
+    <button type="submit" class="btn btn-primary mx-3">작성하기</button>
+  </div>
+
+  </form>
 
   </div>
 </body>
