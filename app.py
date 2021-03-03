@@ -14,7 +14,13 @@ db = client.my_netflix
 ## HTML을 주는 부분
 @app.route('/')
 def home():
-    return render_template('login.html')
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
+        member_info = db.member.find_one({"mem_id":payload['id']})
+        return redirect(url_for("main_page"))
+    except:
+        return render_template('login.html')
 
 @app.route('/register', methods=['GET'])
 def sign_up_page():
@@ -76,7 +82,13 @@ def sign_up():
 @app.route('/login', methods=['GET'])
 def login_page():
     msg = request.args.get("msg")
-    return render_template('login.html',msg = msg)
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
+        member_info = db.member.find_one({"mem_id":payload['id']})
+        return redirect(url_for("main_page"))
+    except:
+        return render_template('login.html',msg = msg)
 
 ## 로그인 관련 - 로그인 버튼 클릭 시
 @app.route('/login', methods=['POST'])
@@ -115,5 +127,6 @@ def review_write_page(title):
         return redirect(url_for("login_page", msg ="로그인 시간 만료!"))
     except jwt.exceptions.DecodeError:
         return redirect(url_for("login_page",msg = "로그인 정보 없음!"))
+        
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
