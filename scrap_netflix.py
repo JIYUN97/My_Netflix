@@ -46,15 +46,6 @@ for category in ["tv", "mv"]:
 
     for g in genres:
       genre = genre + " " + g.text
-
-    # cast_cards = soup.select('#cast-scroller > ol.people > li.card')
-
-    # stars = ""
-
-    # for cast_card in cast_cards:
-    #   p = cast_card.select('p')
-    #   star = p[0].select('a').text
-    #   stars = stars + " " + star
     
     doc = {
       "net_poster": poster_url,
@@ -62,7 +53,6 @@ for category in ["tv", "mv"]:
       "net_cate": category,
       "net_runtime": runtime,
       "net_genre": genre,
-      # "net_stars": stars,
       "net_rv_count": 0
     }
 

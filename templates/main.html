@@ -27,15 +27,37 @@
 
   <!-- 구글폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
+
+  <script>
+    //로그아웃
+    function logout() {
+      $.removeCookie('mytoken', {
+        path: '/main'
+      });
+      alert('로그아웃!')
+      window.location.href = '/'
+    }
     
-    <script>
-      //로그아웃
-      function logout(){
-        $.removeCookie('mytoken', { path: '/main' });
-        alert('로그아웃!')
-        window.location.href='/'
-      }
-    </script>
+    function search_title(){
+        let title_input = $("#title_input").val();
+        if(title_input == ''){
+            alert("검색할 제목을 입력해주세요.")
+            return;
+        }
+        event.preventDefault()
+        $.ajax({
+            type:"GET",
+            url:"/main",
+            data:{
+                "search_title":title_input
+            },
+            success: function(response) {
+                $("#search_cards").html(response)
+            }
+        })
+
+    }
+  </script>
 
   <style type="text/css">
     * {
@@ -56,11 +78,24 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">My Netfix</span> <span>{{nick}}님 접속중! <button type="button" class="btn btn-outline-dark" onclick="logout()">LogOut</button></span> 
+        <span class="navbar-brand">My Netflix</span>
+        <div class="text-right">
+          <div class="align-items-center my-2">
+            <span class="mx-2">{{nick}}님 접속중!</span>
+            <button class="btn btn-dark btn-sm" onclick="logout()">LogOut</button>
+          </div>
+          <div class="align-items-center my-2">
+            <form class="d-flex">
+              <input class="form-control mr-2" type="search" placeholder="제목 검색" aria-label="제목 검색" id="title_input">
+              <button class="btn btn-primary btn-sm" type="submit" onclick="search_title()">검색</button>
+            </form>
+          </div>
+        </div>
       </div>
     </nav>
 
     <!-- Review Card List -->
+    <div id="search_cards">
     <div class="container-fluid p-3">
       <div id="contents-box" class="row">
 
@@ -93,7 +128,7 @@
               <div class="justify-content-between">
                 <div class="btn_box d-inline">
                   <a href="#" class="btn btn-sm btn-primary">리뷰보기</a>
-                  <a href="#" class="btn btn-sm btn-primary">리뷰작성</a>
+                  <a href="/review/write/{{title}}" class="btn btn-sm btn-primary">리뷰작성</a>
                 </div>
                 <span class="review_count far fa-comment-alt"> {{rv_count}}</span>
               </div>
@@ -105,6 +140,7 @@
         {% endfor %}
 
       </div>
+    </div>
     </div>
 
 </body>

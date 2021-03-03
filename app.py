@@ -24,14 +24,20 @@ def sign_up_page():
 @app.route('/main', methods=['GET'])
 def main_page():
     token_receive = request.cookies.get('mytoken')
+    search_title = request.args.get('search_title')
     try:
         payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
         member_info = db.member.find_one({"mem_id":payload['id']})
         nick = member_info['mem_nick']
-        # 1. DB에서 리뷰 정보 모두 가져오기
-        all_netflixs = list(db.netflix.find({}, {'_id': False}))
-        # 2. 성공 여부 & 리뷰 목록 반환하기
-        return render_template("main.html", netflixs=all_netflixs,nick=nick)
+        if search_title is None:
+            # 1. DB에서 리뷰 정보 모두 가져오기
+            all_netflixs = list(db.netflix.find({}, {'_id': False}))
+            # 2. 성공 여부 & 리뷰 목록 반환하기
+            return render_template("main.html", netflixs=all_netflixs,nick=nick)
+        else:
+            search_netflixs = list(db.netflix.find({"net_title":{"$regex":search_title}},{"id_":False}))
+            return render_template("search_main.html", netflixs=search_netflixs,nick=nick)
+
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login_page", msg ="로그인 시간 만료!"))
     except jwt.exceptions.DecodeError:
@@ -96,10 +102,18 @@ def login():
 
 @app.route('/review/write/<title>', methods=['GET'])
 def review_write_page(title):
-    # 1. DB에서 해당 Netflix 정보 모두 가져오기
-    netflix = db.netflix.find({'net_title': {title}}, {'_id': False})
-
-    return render_template('review_write.html', netflix=netflix)
-
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
+        member_info = db.member.find_one({"mem_id":payload['id']})
+        nick = member_info['mem_nick']
+        # 1. DB에서 해당 Netflix 정보 모두 가져오기
+        netflix = db.netflix.find_one({'net_title': title}, {'_id': False})
+        return render_template('review_write.html', netflix=netflix, nick = nick)
+    
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login_page", msg ="로그인 시간 만료!"))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login_page",msg = "로그인 정보 없음!"))
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
