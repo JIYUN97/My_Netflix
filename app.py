@@ -19,9 +19,13 @@ def home():
 def sign_up_page():
     return render_template('register.html')
 
-@app.route('/main',methods=['GET'])
+    
+@app.route('/main', methods=['GET'])
 def main_page():
-    return render_template('main.html')
+    # 1. DB에서 리뷰 정보 모두 가져오기
+    all_netflixs = list(db.netflix.find({}, {'_id': False}))
+    # 2. 성공 여부 & 리뷰 목록 반환하기
+    return render_template("main.html", netflixs=all_netflixs)
 
 ## 회원 가입 관련 - 닉네임 중복 체크 
 @app.route('/nick_dup_check', methods=['POST'])
@@ -78,6 +82,8 @@ def login():
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
