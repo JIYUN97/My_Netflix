@@ -4,7 +4,6 @@ import jwt
 import datetime
 from flask import Flask, render_template, jsonify, request, redirect,url_for
 from datetime import datetime, timedelta
-from flask_login import login_required
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -95,7 +94,12 @@ def login():
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
+@app.route('/review/write/<title>', methods=['GET'])
+def review_write_page(title):
+    # 1. DB에서 해당 Netflix 정보 모두 가져오기
+    netflix = db.netflix.find({'net_title': {title}}, {'_id': False})
 
+    return render_template('review_write.html', netflix=netflix)
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
