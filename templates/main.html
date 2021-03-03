@@ -22,9 +22,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
 
   <!-- 구글폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
+    
+    <script>
+      //로그아웃
+      function logout(){
+        $.removeCookie('mytoken', { path: '/main' });
+        alert('로그아웃!')
+        window.location.href='/'
+      }
+    </script>
 
   <style type="text/css">
     * {
@@ -45,7 +56,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar navbar-light bg-light">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">My Netfix</span>
+        <span class="navbar-brand mb-0 h1">My Netfix</span> <span>{{nick}}님 접속중! <button type="button" class="btn btn-outline-dark" onclick="logout()">LogOut</button></span> 
       </div>
     </nav>
 
