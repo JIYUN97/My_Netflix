@@ -24,8 +24,12 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
+
   <!-- 구글폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 
   <script>
     //로그아웃
@@ -57,30 +61,6 @@
 
     }
   </script>
-
-  <style type="text/css">
-    * {
-      font-family: 'Nanum Gothic', sans-serif;
-    }
-
-    .main-logo {
-      font-size: xx-large;
-      font-weight: bold;
-    }
-
-    .poster {
-      height: 300px;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .text-ellipsis {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-  </style>
 </head>
 
 <body>
