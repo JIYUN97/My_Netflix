@@ -81,16 +81,12 @@
         </thead>
         <tbody id="reviews-box">
 
-          <tr>
-            <td>김르탄</td>
-            <td>#룰루랄랄라</td>
-          </tr>
-
           {% for review in reviews %}
+          {% set nick = review['rv_hashtag'] %}
           {% set hashtag = review['rv_hashtag'] %}
 
           <tr>
-            <td>김르탄</td>
+            <td>{{nick}}</td>
             <td>{{hashtag}}</td>
           </tr>
 

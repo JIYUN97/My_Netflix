@@ -35,13 +35,15 @@ def main_page():
         payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
         member_info = db.member.find_one({"mem_id":payload['id']})
         nick = member_info['mem_nick']
+
         if search_title is None:
-            # 1. DB에서 리뷰 정보 모두 가져오기
-            all_netflixs = list(db.netflix.find({}, {'_id': False}))
-            # 2. 성공 여부 & 리뷰 목록 반환하기
+            # 1. DB에서 Netflix 정보 모두 가져오기 ()
+            all_netflixs = list(db.netflix.find({}, {'_id': False}).sort([("net_rv_count", -1),("net_title", 1)]))
+
+            # 2. 닉네임 & Netflix 목록 반환하기
             return render_template("main.html", netflixs=all_netflixs,nick=nick)
         else:
-            search_netflixs = list(db.netflix.find({"net_title":{"$regex":search_title}},{"id_":False}))
+            search_netflixs = list(db.netflix.find({"net_title":{"$regex":search_title}},{"id_":False}).sort([("net_rv_count", -1),("net_title", 1)]))
             return render_template("search_main.html", netflixs=search_netflixs,nick=nick)
 
     except jwt.ExpiredSignatureError:
@@ -130,47 +132,55 @@ def review_write_page(title):
 
 @app.route('/review/writeOk/<title>', methods=['POST'])
 def review_write(title):
-    
-    # 리뷰 정보 받아오기
-    hashtag = request.form['hashtag']
-    visual = request.form['visual']
-    story = request.form['story']
-    funny = request.form['funny']
-    watch_again = request.form['watch_again']
-    review_text = request.form['review_text']
+  token_receive = request.cookies.get('mytoken')
 
-    review = {
-        # 'rv_nick':nick,
-        'rv_hashtag':hashtag,
-        'rv_visual': visual, 
-        'rv_story': story, 
-        'rv_funny': funny, 
-        'rv_watch_again': watch_again, 
-        'rv_review': review_text, 
-        'rv_net_title': title
-    }
+  try:
+      payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
+      member_info = db.member.find_one({"mem_id":payload['id']})
+      nick = member_info['mem_nick']
+  
+      # 리뷰 정보 받아오기
+      hashtag = request.form['hashtag']
+      visual = request.form['visual']
+      story = request.form['story']
+      funny = request.form['funny']
+      watch_again = request.form['watch_again']
+      review_text = request.form['review_text']
 
-    db.review.insert_one(review)
+      review = {
+          'rv_nick':nick,
+          'rv_hashtag':hashtag,
+          'rv_visual': visual, 
+          'rv_story': story, 
+          'rv_funny': funny, 
+          'rv_watch_again': watch_again, 
+          'rv_review': review_text, 
+          'rv_net_title': title
+      }
 
-    db.netflix.update_one({ "net_title": title }, { "$inc": { "net_rv_count": 1 } })
+      db.review.insert_one(review)
 
-    return redirect(url_for('review_list', title=title))
+      db.netflix.update_one({ "net_title": title }, { "$inc": { "net_rv_count": 1 } })
+
+      return redirect(url_for('review_list', title=title, nick=nick))
+
+  except jwt.ExpiredSignatureError:
+      return redirect(url_for("login_page", msg ="로그인 시간 만료!"))
+  except jwt.exceptions.DecodeError:
+      return redirect(url_for("login_page",msg = "로그인 정보 없음!"))
 
 @app.route('/review/list/<title>', methods=['GET'])
 def review_list(title):
     # 1. DB에서 해당 Netflix 정보 모두 가져오기
-    netflix = db.netflix.find_one({'net_title': title}, {'_id': False})
+    netflix = db.netflix.find_one({"net_title": title}, {"_id": False})
 
     # 2. DB에서 해당 Netflix 리뷰 목록 반환하기
-    reviews = db.reivew.find({'rv_net_title': title}, {'_id': False})
+    reviews = list(db.review.find({"rv_net_title": title}, {'_id': False}))
 
     print(reviews)
 
     # 3. Netflix 정보 & 리뷰 목록 반환하기
     return render_template("review_list.html", netflix=netflix, reviews=reviews)
-
-
-        
         
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
