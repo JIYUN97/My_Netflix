@@ -141,10 +141,10 @@ def review_write(title):
   
       # 리뷰 정보 받아오기
       hashtag = request.form['hashtag']
-      visual = request.form['visual']
-      story = request.form['story']
-      funny = request.form['funny']
-      watch_again = request.form['watch_again']
+      visuals = request.form.getlist('visual')
+      story = request.form.getlist('story')
+      funny = request.form.getlist('funny')
+      watch_again = request.form.getlist('wa')
       review_text = request.form['review_text']
 
       # 해당 netflix의 리뷰 개수를 받아와서 추가할 리뷰의 번호를 지정
@@ -156,10 +156,10 @@ def review_write(title):
           'rv_num': num,
           'rv_nick':nick,
           'rv_hashtag':hashtag,
-          'rv_visual': visual, 
-          'rv_story': story, 
-          'rv_funny': funny, 
-          'rv_watch_again': watch_again, 
+          'rv_visual': len(visuals), 
+          'rv_story': len(story), 
+          'rv_funny': len(funny), 
+          'rv_watch_again': len(watch_again), 
           'rv_review': review_text, 
           'rv_net_title': title
       }
