@@ -30,11 +30,11 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='review_list.css') }}">
 
   <script>
-    function show_detail(num){
-      if ($("#"+num).css('display') == 'none')
-        $("#"+num).show();
+    function show_detail(num) {
+      if ($("#" + num).css('display') == 'none')
+        $("#" + num).show();
       else
-        $("#"+num).hide();
+        $("#" + num).hide();
     }
   </script>
 
@@ -76,82 +76,158 @@
 
       <div class="board_list_wrap">
         <div class="board_list">
+
+          <!-- 리뷰 목록 타이틀 -->
           <div class="board_list_head">
             <div class="num">번호</div>
             <div class="writer">글쓴이</div>
             <div class="hashtag">나만의 해시태그</div>
           </div>
+
+          <!-- 리뷰 목록 -->
           <div class="board_list_body">
 
             {% for review in reviews %}
+            {% set num = review['rv_num'] %}
             {% set nick = review['rv_nick'] %}
             {% set hashtag = review['rv_hashtag'] %}
-            {% set num = review['rv_num'] %}
+            {% set visual = review['rv_visual'] | int %}
+            {% set story = review['rv_story'] | int %}
+            {% set funny = review['rv_funny'] | int %}
+            {% set watch_again = review['rv_watch_again'] | int %} 
+            {% set review_text = review['rv_review'] %}
 
+            <!-- 번호 / 작성자 / 해시태그 -->
             <div class="item d-flex justify-content-between">
               <div class="num">{{num}}</div>
               <div class="writer">{{nick}}</div>
               <div class="hashtag">{{hashtag}}</div>
-              <div><button value="{{num}}" onclick="show_detail({{num}})">more</button></div>
+
+              <!-- toggle 버튼 -->
+              <div>
+                <button value="{{num}}" onclick="show_detail({{num}})">more</button>
+              </div>
               <div class="btn_toggle">
                 <div><a id="toggle_{{num}}" href="#" class="fas fa-caret-down"></a></div>
               </div>
+
             </div>
 
+            <!-- 숨겨진 리뷰 (별점, 리뷰글) -->
             <div class="item hidden-review" id={{num}}>
+
               <!-- 별점 -->
-              <div class="mx-5 mb-4 px-5 row">
 
                 <div class="col-6">
+
                   <!-- 영상미 -->
                   <div class="py-3 row align-items-center justify-content-end">
                     <label for="visual" class="col-4 control-label label-title">영상미</label>
                     <div class="col-8">
-                      <p id="star_grade">
-                        <a href="#">★</a>
-                        <a href="#">★</a>
-                        <a href="#">★</a>
-                        <a href="#">★</a>
-                        <a href="#">★</a>
-                      </p>
+                      <div class="rating visual-rating">
+
+                        {% for i in range(6) %}
+
+                        {% if (i<=visual) %}
+
+                        <input type="checkbox" name="visual" id="visual{{i}}" value="{{i}}" class="rate_visual rate_radio"
+                          title="{{i}}점" checked disabled>
+
+                        {% endif %}
+
+                        {% if (i>visual) %}
+
+                        <input type="checkbox" name="visual" id="visual{{i}}" value="{{i}}" class="rate_visual rate_radio"
+                          title="{{i}}점" disabled>
+
+                        {% endif %}
+
+                        {% endfor %}
+                      </div>
                     </div>
                   </div>
+
                   <!-- 스토리 -->
                   <div class="py-3 row align-items-center justify-content-end">
                     <label for="story" class="col-4 control-label label-title">스토리</label>
                     <div class="col-8">
-                      <input id="story" name="story" class="form-control rating rating-loading" data-min="0"
-                        data-max="5" data-step="1" value="">
+                      <div class="rating story-rating">
+                        <!-- 해당 별점을 클릭하면 해당 별과 그 왼쪽의 모든 별의 체크박스에 checked 적용 -->
+                        <input type="checkbox" name="story" id="story1" value="1" class="rate_story rate_radio"
+                          title="1점">
+                        <label for="story1"></label>
+                        <input type="checkbox" name="story" id="story2" value="2" class="rate_story rate_radio"
+                          title="2점">
+                        <label for="story2"></label>
+                        <input type="checkbox" name="story" id="story3" value="3" class="rate_story rate_radio"
+                          title="3점">
+                        <label for="story3"></label>
+                        <input type="checkbox" name="story" id="story4" value="4" class="rate_story rate_radio"
+                          title="4점">
+                        <label for="story4"></label>
+                        <input type="checkbox" name="story" id="story5" value="5" class="rate_story rate_radio"
+                          title="5점">
+                        <label for="story5"></label>
+                      </div>
                     </div>
                   </div>
+
                 </div>
 
                 <div class="col-6">
+
                   <!-- 재미 -->
                   <div class="py-3 row align-items-center">
                     <label for="story" class="col-4 control-label label-title">재미</label>
                     <div class="col-8">
-                      <input id="funny" name="funny" class="form-control rating rating-loading" data-min="0"
-                        data-max="5" data-step="1" value="">
+                      <div class="rating funny-rating">
+                        <!-- 해당 별점을 클릭하면 해당 별과 그 왼쪽의 모든 별의 체크박스에 checked 적용 -->
+                        <input type="checkbox" name="funny" id="funny1" value="1" class="rate_funny rate_radio"
+                          title="1점">
+                        <label for="funny1"></label>
+                        <input type="checkbox" name="funny" id="funny2" value="2" class="rate_funny rate_radio"
+                          title="2점">
+                        <label for="funny2"></label>
+                        <input type="checkbox" name="funny" id="funny3" value="3" class="rate_funny rate_radio"
+                          title="3점">
+                        <label for="funny3"></label>
+                        <input type="checkbox" name="funny" id="funny4" value="4" class="rate_funny rate_radio"
+                          title="4점">
+                        <label for="funny4"></label>
+                        <input type="checkbox" name="funny" id="funny5" value="5" class="rate_funny rate_radio"
+                          title="5점">
+                        <label for="funny5"></label>
+                      </div>
                     </div>
                   </div>
+
                   <!-- 다시 볼 의향 -->
                   <div class="py-3 row align-items-center">
                     <label for="story" class="col-4 control-label label-title">다시 볼 의향</label>
                     <div class="col-8">
-                      <input id="watch_again" name="watch_again" class="form-control rating rating-loading" data-min="0"
-                        data-max="5" data-step="1" value="">
+                      <div class="rating wa-rating">
+                        <!-- 해당 별점을 클릭하면 해당 별과 그 왼쪽의 모든 별의 체크박스에 checked 적용 -->
+                        <input type="checkbox" name="wa" id="wa1" value="1" class="rate_wa rate_radio" title="1점">
+                        <label for="wa1"></label>
+                        <input type="checkbox" name="wa" id="wa2" value="2" class="rate_wa rate_radio" title="2점">
+                        <label for="wa2"></label>
+                        <input type="checkbox" name="wa" id="wa3" value="3" class="rate_wa rate_radio" title="3점">
+                        <label for="wa3"></label>
+                        <input type="checkbox" name="wa" id="wa4" value="4" class="rate_wa rate_radio" title="4점">
+                        <label for="wa4"></label>
+                        <input type="checkbox" name="wa" id="wa5" value="5" class="rate_wa rate_radio" title="5점">
+                        <label for="wa5"></label>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-              </div>
+                </div>
               <!-- End of 별점 -->
 
-              <div class="writer">sddd</div>
-              <div class="hashtag">dddd</div>
-              <div class="btn_toggle">dd</div>
-              <span class="fas fa-caret-down">dd</span>
+              <!-- 리뷰 줄글 -->
+              <div class="mx-5 mb-4 px-5 w-100">
+                <div class="review-text">{{review_text}}</div>
+              </div>
             </div>
 
             {% endfor %}
@@ -164,7 +240,7 @@
     <!-- 리뷰 목록 끝 -->
 
     <div class="row mt-5 justify-content-center">
-      <button type="button" onClick="location.href='/main'" class="btn btn-primary mx-3">메인으로</button>
+      <button type="button" onClick="location.href='/main'" class="btn btn-primary mb-5">메인으로</button>
     </div>
 
   </div>
