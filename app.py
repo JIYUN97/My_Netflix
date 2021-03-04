@@ -37,10 +37,10 @@ def main_page():
         nick = member_info['mem_nick']
 
         if search_title is None:
-            # 1. DB에서 Netflix 정보 모두 가져오기 ()
+            # DB에서 Netflix 정보 모두 가져오기 (리뷰 개수 내림차순 정렬 후 제목 오름차순 정렬)
             all_netflixs = list(db.netflix.find({}, {'_id': False}).sort([("net_rv_count", -1),("net_title", 1)]))
 
-            # 2. 닉네임 & Netflix 목록 반환하기
+            # 닉네임 & Netflix 목록 반환하기
             return render_template("main.html", netflixs=all_netflixs,nick=nick)
         else:
             search_netflixs = list(db.netflix.find({"net_title":{"$regex":search_title}},{"id_":False}).sort([("net_rv_count", -1),("net_title", 1)]))
@@ -158,8 +158,10 @@ def review_write(title):
           'rv_net_title': title
       }
 
+      # DB에 리뷰 정보 업데이트
       db.review.insert_one(review)
 
+      # 해당 netflix의 리뷰 개수를 업데이트해서 DB에 적용
       db.netflix.update_one({ "net_title": title }, { "$inc": { "net_rv_count": 1 } })
 
       return redirect(url_for('review_list', title=title, nick=nick))
@@ -176,8 +178,6 @@ def review_list(title):
 
     # 2. DB에서 해당 Netflix 리뷰 목록 반환하기
     reviews = list(db.review.find({"rv_net_title": title}, {'_id': False}))
-
-    print(reviews)
 
     # 3. Netflix 정보 & 리뷰 목록 반환하기
     return render_template("review_list.html", netflix=netflix, reviews=reviews)

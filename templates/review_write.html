@@ -26,69 +26,12 @@
   <!-- 구글폰트 -->
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='review_list.css') }}">
+  
   <!-- 별점 템플릿 -->
   <script src="{{ url_for('static', filename='rating.js') }}"></script>
 
-  <style type="text/css">
-    * {
-      font-family: 'Nanum Gothic', sans-serif;
-    }
-
-    .poster {
-      height: 300px;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .label-title {
-      width: 200px;
-      text-align: right;
-      padding-right: 20px;
-    }
-  </style>
-
-  <script>
-    function write_review() {
-
-      var formData =  $("#write_review").serialize();
-
-
-      let username = $("#input-username").val()
-      let password = $("#input-password").val()
-  
-      if (username == "") {
-          $("#help-id-login").text("아이디를 입력해주세요.")
-          $("#input-username").focus()
-          return;
-      } else {
-          $("#help-id-login").text("")
-      }
-  
-      if (password == "") {
-          $("#help-password-login").text("비밀번호를 입력해주세요.")
-          $("#input-password").focus()
-          return;
-      } else {
-          $("#help-password-login").text("")
-      }
-      $.ajax({
-          type: "POST",
-          url: "/review/writeOk/{{title}}",
-          data: {
-              'hashtag':hashtag,
-              'visual': visual, 
-              'story': story, 
-              'funny': funny, 
-              'watch_again': watch_again, 
-              'review': review_text, 
-              'title': title
-          },
-          success: function (response) {
-              window.location.replace("/main");
-          }
-      });
-  }
-  </script>
 </head>
 
 <body>
@@ -100,20 +43,25 @@
     {%  set runtime = netflix['net_runtime'] %}
     {%  set genre = netflix['net_genre'] %}
 
-    <div class="row mt-5">
-      <a href="/main" class="btn btn-primary mx-3">뒤로가기</a>
-    </div>
-
     <!-- Netflix Info -->
     <div class="row m-5">
       <div class="mr-3">
         <img class="img-fluid rounded mb-4 mb-lg-0" src="{{poster_path}}" alt="">
       </div>
       <div class="p-3">
-        <h1 class="font-weight-light">{{title}}</h1>
-        <p>{{category}}</p>
-        <p>{{runtime}}</p>
-        <p>{{genre}}</p>
+        <h1 class="info-title font-weight-light">{{title}}</h1>
+
+        {% if (category=="tv") %}
+        <p class="info info-category">TV 시리즈</p>
+        {% endif %}
+
+        {% if (category=="mv") %}
+        <p class="info info-category">영화</p>
+        {% endif %}
+
+        <p class="info info-runtime">Runtime [ {{runtime}} ]</p>
+
+        <p class="info info-genre">장르 - {{genre}}</p>
       </div>
     </div>
 
@@ -198,6 +146,7 @@
 
   <!-- 취소/작성 버튼-->
   <div class="text-center mb-5">
+    <a href="/main" class="btn btn-primary mx-3">메인으로</a>
     <button type="reset" class="btn btn-primary mx-3">취소하기</button>
     <button type="submit" class="btn btn-primary mx-3">작성하기</button>
   </div>
