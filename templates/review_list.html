@@ -30,9 +30,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='review_list.css') }}">
 
   <script>
-    $('#toggle_{{num}}').click(funtion() {
-      $('#h_review_{{num}}').toggle();
-    });
+    function show_detail(num){
+      if ($("#"+num).css('display') == 'none')
+        $("#"+num).show();
+      else
+        $("#"+num).hide();
+    }
   </script>
 
 </head>
@@ -89,12 +92,13 @@
               <div class="num">{{num}}</div>
               <div class="writer">{{nick}}</div>
               <div class="hashtag">{{hashtag}}</div>
+              <div><button value="{{num}}" onclick="show_detail({{num}})">more</button></div>
               <div class="btn_toggle">
-                <a id="toggle_{{num}}" href="#" class="fas fa-caret-down"></a>
+                <div><a id="toggle_{{num}}" href="#" class="fas fa-caret-down"></a></div>
               </div>
             </div>
 
-            <div id="h_review_{{num}}" class="item hidden-review">
+            <div class="item hidden-review" id={{num}}>
               <!-- 별점 -->
               <div class="mx-5 mb-4 px-5 row">
 
