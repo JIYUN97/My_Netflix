@@ -173,6 +173,7 @@ def review_write(title):
 
 @app.route('/review/list/<title>', methods=['GET'])
 def review_list(title):
+
     # 1. DB에서 해당 Netflix 정보 모두 가져오기
     netflix = db.netflix.find_one({"net_title": title}, {"_id": False})
 
