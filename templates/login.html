@@ -1,123 +1,142 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-      <!-- Webpage Title -->
-      <title>My_Netflix</title>
+  <!-- Webpage Title -->
+  <title>My_Netflix</title>
 
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-      <!-- Bootstrap CSS -->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-            crossorigin="anonymous">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-      <!-- JS -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-            
-      <!-- Bulma -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
-      <script type="text/javascript">
-      {% if msg%}
-            alert("{{msg}}")
-      {%endif%}
-      //회원가입 페이지로 이동
-      function register(){
-            window.location.href ="/register"
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+
+  <script type="text/javascript">
+
+    //회원가입 페이지로 이동
+    function register() {
+      window.location.href = "/register"
+    }
+
+    function login() {
+
+      let id = $('#id_input').val();
+      let pwd = $('#pwd_input').val();
+
+      if (id == '') {
+        alert("아이디를 입력해주세요!")
+        $("#id_input").focus();
+        return;
       }
 
-      function login(){
-            let id = $('#id_input').val();
-            let pwd = $('#pwd_input').val();
-            if(id == ''){
-                  alert("아이디를 입력해주세요!")
-                  $("#id_input").focus();
-                  return;
-            }
-            if(pwd == ''){
-                  alert("비밀번호를 입력해주세요!")
-                  $("#pwd_input").focus();
-                  return;
-            }
-            $.ajax({
-                  type:"POST",
-                  url:"/login",
-                  data:{
-                  'id':id,
-                  'pwd':pwd
-                  },
-                  success: function(response) {
-                        if (response['result'] == 'success') {
-                              $.cookie('mytoken', response['token'], {path: '/'});
-                              window.location.replace("/main")
-                        } else {
-                              alert(response['msg'])
-                        }
-                  }
-            })
+      if (pwd == '') {
+        alert("비밀번호를 입력해주세요!")
+        $("#pwd_input").focus();
+        return;
+      }
 
-      }
-      </script>
-      <style type="text/css">
-      .wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-      }
-      .container{
-            width:800px;
-            padding:50px;
-            text-align:center;
-      }
-      button{
-            width:100px;
-      }
-      .hero{
-            background-color:rgba(163, 0, 11, 0.97)!important;
-      }
-      *{
-            
-      }
-      </style>
+      $.ajax({
+        type: "POST",
+        url: "/login",
+        data: {
+          'id': id,
+          'pwd': pwd
+        },
+        success: function (response) {
+          if (response['result'] == 'success') {
+            $.cookie('mytoken', response['token'], {
+              path: '/'
+            });
+            window.location.replace("/main")
+          } else {
+            alert(response['msg'])
+          }
+        }
+      })
+    }
+
+  </script>
 
 </head>
+
 <body>
-<section class="hero is-danger">
-      <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
-            <h1 class="title is-sparta">My Netflix</h1>
-            <h3 class="subtitle is-sparta">사람들과 함께 나누는 넷플 공유장</h3>
-      </div>
-</section>
-<section class="section">
-      <div class="container">
-      <div class ="wrapper">
-            <div class="box" style="max-width: 800px;min-height:600px;margin:auto">
-                  <article class="media">
-                  <div class="media-content">
-                        <div class="content">
-                              <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">아이디</span>
-                                    <input type="text" id="id_input" class="form-control dup_before" placeholder="ID를 입력하세요." aria-describedby="button-addon2">
-                              </div>
-                              <div class="input-group mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-default">비밀번호</span>
-                                    <input type="password" id="pwd_input" class="form-control" placeholder="비밀번호를 입력하세요." aria-describedby="button-addon2">
-                              </div>
-                              <br/>
-                              <div>
-                              <button type="button" class="btn btn-secondary" onclick="login()">로그인</button>
-                              <button type="button" class="btn btn-secondary" onclick="register()">회원가입</button>
-                              </div>
-                        </div>
-                  </div>
-                  </article>
+
+  <!-- 상단 타이틀 -->
+  <section class="hero">
+    <div class="hero-body has-text-centered">
+      <h1 class="title is-netflix">My Netflix</h1>
+      <h3 class="subtitle is-netflix">사람들과 함께 나누는 넷플 공유장</h3>
+    </div>
+  </section>
+
+  <!-- 로그인 박스 -->
+  <section class="section">
+    <div class="container">
+
+      <!-- 로그인 박스 -->
+      <div class="box">
+        <article class="media">
+          <div class="media-content">
+            <div class="content">
+
+              <!-- 아이디 -->
+              <div class="field has-addons">
+                <div class="control has-icons-left" style="width:100%">
+                  <input id="id_input" class="input dup_before" type="text" placeholder="아이디">
+                  <span class="icon is-small is-left fa fa-user"><i class="fa fa-user"></i></span>
+                </div>
+                <div id="btn-check-dup" class="control is-hidden">
+                  <button class="button is-sparta" onclick="id_dup_check()">중복확인</button>
+                </div>
+              </div>
+
+              <!-- 비밀번호 -->
+              <div class="field">
+                <div class="control has-icons-left">
+                  <input id="pwd_input" class="input" type="password" placeholder="비밀번호">
+                  <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
+                </div>
+              </div>
+
+              <!-- 로그인 버튼 -->
+              <div class="level is-mobile">
+                <button class="level-item button is-sparta" onclick="login()">
+                  로그인
+                </button>
+              </div>
+
+              <!-- 구분선 -->
+              <hr>
+
+              <!-- 회원가입 -->
+              <h4 class="mb-3">아직 회원이 아니라면</h4>
+              <div class="level is-mobile">
+                <button class="level-item button is-sparta is-outlined" onclick="register()">
+                  회원가입하기
+                </button>
+              </div>
+
             </div>
+          </div>
+        </article>
       </div>
-      </div>
-</section>
+      <!-- End of 로그인 박스 -->
+
+    </div>
+  </section>
+
 </body>
+
 </html>

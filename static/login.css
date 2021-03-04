@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'MaplestoryOTFBold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  * {
+    font-family: 'MaplestoryOTFBold' !important;
+  }
+  
+  body {
+    background-image: url('/static/corn.jpeg');
+    background-size: cover;
+    background-color: aliceblue;
+    min-height: 100vh;
+  }
+  
+  .section {
+    padding: 80px 0;
+    max-width: 750px;
+    margin: auto;
+  } 
+  
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  .hero{
+      background-color: black;
+  }
+  .is-netflix{
+      color:rgba(229, 9, 20);
+  }
