@@ -29,6 +29,12 @@
   <!-- Custom CSS -->
   <link rel="stylesheet" href="{{ url_for('static', filename='review_list.css') }}">
 
+  <script>
+
+    $('.hidden-review')
+
+  </script>
+
 </head>
 
 <body>
@@ -61,13 +67,14 @@
         <p class="info info-genre">장르 - {{genre}}</p>
       </div>
     </div>
-    
+
     <!-- 리뷰 목록 -->
     <div class="reviews">
 
       <div class="board_list_wrap">
         <div class="board_list">
           <div class="board_list_head">
+            <div class="num">번호</div>
             <div class="writer">글쓴이</div>
             <div class="hashtag">나만의 해시태그</div>
           </div>
@@ -76,12 +83,66 @@
             {% for review in reviews %}
             {% set nick = review['rv_nick'] %}
             {% set hashtag = review['rv_hashtag'] %}
+            {% set num = review['rv_num'] %}
 
-            <div class="item">
+            <div class="item d-flex justify-content-between">
+              <div class="num">{{num}}</div>
               <div class="writer">{{nick}}</div>
               <div class="hashtag">{{hashtag}}</div>
-              <div class="btn_toggle"></div>
-              <span class="fas fa-caret-down"></span>
+              <div class="btn_toggle">
+                <a href="#" class="fas fa-caret-down"></a>
+              </div>
+            </div>
+
+            <div class="item hidden-review">
+              <!-- 별점 -->
+              <div class="mx-5 mb-4 px-5 row">
+
+                <div class="col-6">
+                  <!-- 영상미 -->
+                  <div class="py-3 row align-items-center justify-content-end">
+                    <label for="visual" class="col-4 control-label label-title">영상미</label>
+                    <div class="col-8">
+                      <input id="visual" name="visual" class="form-control rating rating-loading" data-min="0"
+                        data-max="5" data-step="1" value="">
+                    </div>
+                  </div>
+                  <!-- 스토리 -->
+                  <div class="py-3 row align-items-center justify-content-end">
+                    <label for="story" class="col-4 control-label label-title">스토리</label>
+                    <div class="col-8">
+                      <input id="story" name="story" class="form-control rating rating-loading" data-min="0"
+                        data-max="5" data-step="1" value="">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-6">
+                  <!-- 재미 -->
+                  <div class="py-3 row align-items-center">
+                    <label for="story" class="col-4 control-label label-title">재미</label>
+                    <div class="col-8">
+                      <input id="funny" name="funny" class="form-control rating rating-loading" data-min="0"
+                        data-max="5" data-step="1" value="">
+                    </div>
+                  </div>
+                  <!-- 다시 볼 의향 -->
+                  <div class="py-3 row align-items-center">
+                    <label for="story" class="col-4 control-label label-title">다시 볼 의향</label>
+                    <div class="col-8">
+                      <input id="watch_again" name="watch_again" class="form-control rating rating-loading" data-min="0"
+                        data-max="5" data-step="1" value="">
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+              <!-- End of 별점 -->
+
+              <div class="writer">sddd</div>
+              <div class="hashtag">dddd</div>
+              <div class="btn_toggle">dd</div>
+              <span class="fas fa-caret-down">dd</span>
             </div>
 
             {% endfor %}
@@ -89,12 +150,12 @@
           </div>
         </div>
       </div>
-      
+
     </div>
     <!-- 리뷰 목록 끝 -->
-    
+
     <div class="row mt-5 justify-content-center">
-      <a href="/main" class="btn btn-primary mx-3">메인으로</a>
+      <button type="button" onClick="location.href='/main'" class="btn btn-primary mx-3">메인으로</button>
     </div>
 
   </div>

@@ -121,7 +121,7 @@ def review_write_page(title):
         payload = jwt.decode(token_receive,SECRET_KEY,algorithms=['HS256'])
         member_info = db.member.find_one({"mem_id":payload['id']})
         nick = member_info['mem_nick']
-        # 1. DB에서 해당 Netflix 정보 모두 가져오기
+        # DB에서 해당 Netflix 정보 가져오기
         netflix = db.netflix.find_one({'net_title': title}, {'_id': False})
         return render_template('review_write.html', netflix=netflix, nick = nick)
     
@@ -147,7 +147,13 @@ def review_write(title):
       watch_again = request.form['watch_again']
       review_text = request.form['review_text']
 
+      # 해당 netflix의 리뷰 개수를 받아와서 추가할 리뷰의 번호를 지정
+      netflix = db.netflix.find_one({'net_title': title}, {'_id': False})
+
+      num = netflix['net_rv_count'] + 1
+
       review = {
+          'rv_num': num,
           'rv_nick':nick,
           'rv_hashtag':hashtag,
           'rv_visual': visual, 
