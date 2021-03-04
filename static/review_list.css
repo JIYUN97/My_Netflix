@@ -55,9 +55,12 @@ a:hover {
   border-bottom: 1px solid #ccc;
 }
 
-.board_list_head>div,
-.board_list_body .item>div {
+.board_list_head>div {
   display: inline-block;
+  font-size: 14px;
+}
+
+.board_list_body .item>div {
   font-size: 14px;
 }
 
@@ -87,7 +90,7 @@ a:hover {
   display: none;
 }
 
-.rating .rate_radio {
+/* .rating .rate_radio {
   position: relative;
   display: inline-block;
   z-index: 20;
@@ -111,9 +114,22 @@ a:hover {
 }
 .rating .rate_radio:checked + label {
   background-image: url('/static/fullstar.png');
-}
+} */
 
 .review-text {
   width: 80%;
   border: 1px solid black;
+}
+
+.more_button, .more_button:focus{
+  outline:0;
+  border:0;
+  background-color:rgba(0, 0, 0, 0);
+}
+
+.review-box {
+  width: 80%;
+  display: block;
+  margin: 20px auto;
+  overflow: hidden;
 }
