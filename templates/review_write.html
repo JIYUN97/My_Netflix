@@ -15,7 +15,7 @@
 
   <!-- Bootstrap Fontawesome -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://kit.fontawesome.com/c0c8dc8706.js" crossorigin="anonymous"></script>
+  <l src="https://kit.fontawesome.com/c0c8dc8706.js" crossorigin="anonymous"></l>
 
   <!-- JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -27,10 +27,114 @@
   <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@700&display=swap" rel="stylesheet">
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="{{ url_for('static', filename='review_list.css') }}">
-  
-  <!-- 별점 템플릿 -->
-  <script src="{{ url_for('static', filename='rating.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='review_write.css') }}">
+
+  <script>
+    //별점 마킹 모듈 프로토타입으로 생성
+    function VisualRating() {};
+    VisualRating.prototype.rate = 0;
+    VisualRating.prototype.setRate = function (newrate) {
+      //별점 마킹 - 클릭한 별 이하 모든 별 체크 처리
+      this.rate = newrate;
+      let items = document.querySelectorAll('.rate_visual');
+
+      items.forEach(function (item, idx) {
+        if (idx < newrate) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+      });
+    }
+
+    function FunnyRating() {};
+    FunnyRating.prototype.rate = 0;
+    FunnyRating.prototype.setRate = function (newrate) {
+      //별점 마킹 - 클릭한 별 이하 모든 별 체크 처리
+      this.rate = newrate;
+      let items = document.querySelectorAll('.rate_funny');
+
+      items.forEach(function (item, idx) {
+        if (idx < newrate) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+      });
+    }
+
+    function StoryRating() {};
+    StoryRating.prototype.rate = 0;
+    StoryRating.prototype.setRate = function (newrate) {
+      //별점 마킹 - 클릭한 별 이하 모든 별 체크 처리
+      this.rate = newrate;
+      let items = document.querySelectorAll('.rate_story');
+
+      items.forEach(function (item, idx) {
+        if (idx < newrate) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+      });
+    }
+
+    function WARating() {};
+    WARating.prototype.rate = 0;
+    WARating.prototype.setRate = function (newrate) {
+      //별점 마킹 - 클릭한 별 이하 모든 별 체크 처리
+      this.rate = newrate;
+      let items = document.querySelectorAll('.rate_wa');
+
+      items.forEach(function (item, idx) {
+        if (idx < newrate) {
+          item.checked = true;
+        } else {
+          item.checked = false;
+        }
+      });
+    }
+
+    let visual_rating = new VisualRating(); // 영상미 별점 인스턴스 생성
+    let story_rating = new StoryRating(); // 스토리 별점 인스턴스 생성
+    let funny_rating = new FunnyRating(); // 재미 별점 인스턴스 생성
+    let wa_rating = new WARating(); // 다시 볼 의향 별점 인스턴스 생성
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // 영상미 별점선택 이벤트 리스너
+      document.querySelector('.visual-rating').addEventListener('click', function (e) {
+        let elem = e.target;
+        if (elem.classList.contains('rate_visual')) {
+          visual_rating.setRate(parseInt(elem.value));
+        }
+      })
+      
+      // 스토리 별점선택 이벤트 리스너
+      document.querySelector('.story-rating').addEventListener('click', function (e) {
+        let elem = e.target;
+        if (elem.classList.contains('rate_story')) {
+          story_rating.setRate(parseInt(elem.value));
+        }
+      })
+      
+      // 재미 별점선택 이벤트 리스너
+      document.querySelector('.funny-rating').addEventListener('click', function (e) {
+        let elem = e.target;
+        if (elem.classList.contains('rate_funny')) {
+          funny_rating.setRate(parseInt(elem.value));
+        }
+      })
+
+      // 다시 볼 의향 별점선택 이벤트 리스너
+      document.querySelector('.wa-rating').addEventListener('click', function (e) {
+        let elem = e.target;
+        if (elem.classList.contains('rate_wa')) {
+          wa_rating.setRate(parseInt(elem.value));
+        }
+      })
+    });
+  </script>
 
 </head>
 
@@ -91,41 +195,91 @@
           <div class="mx-5 mb-4 px-5 row">
 
             <div class="col-6">
+
               <!-- 영상미 -->
               <div class="py-3 row align-items-center justify-content-end">
                 <label for="visual" class="col-4 control-label label-title">영상미</label>
                 <div class="col-8">
-                  <input id="visual" name="visual" class="form-control rating rating-loading" data-min="0" data-max="5"
-                    data-step="1" value="">
+                  <div class="rating visual-rating">
+                    <!-- 해당 별점을 클릭하면 해당 별과 그 왼쪽의 모든 별의 체크박스에 checked 적용 -->
+                    <input type="checkbox" name="visual" id="visual1" value="1" class="rate_visual rate_radio" title="1점">
+                    <label for="visual1"></label>
+                    <input type="checkbox" name="visual" id="visual2" value="2" class="rate_visual rate_radio" title="2점">
+                    <label for="visual2"></label>
+                    <input type="checkbox" name="visual" id="visual3" value="3" class="rate_visual rate_radio" title="3점">
+                    <label for="visual3"></label>
+                    <input type="checkbox" name="visual" id="visual4" value="4" class="rate_visual rate_radio" title="4점">
+                    <label for="visual4"></label>
+                    <input type="checkbox" name="visual" id="visual5" value="5" class="rate_visual rate_radio" title="5점">
+                    <label for="visual5"></label>
+                  </div>
                 </div>
               </div>
+
               <!-- 스토리 -->
               <div class="py-3 row align-items-center justify-content-end">
                 <label for="story" class="col-4 control-label label-title">스토리</label>
                 <div class="col-8">
-                  <input id="story" name="story" class="form-control rating rating-loading" data-min="0" data-max="5"
-                    data-step="1" value="">
+                  <div class="rating story-rating">
+                    <!-- 해당 별점을 클릭하면 해당 별과 그 왼쪽의 모든 별의 체크박스에 checked 적용 -->
+                    <input type="checkbox" name="story" id="story1" value="1" class="rate_story rate_radio" title="1점">
+                    <label for="story1"></label>
+                    <input type="checkbox" name="story" id="story2" value="2" class="rate_story rate_radio" title="2점">
+                    <label for="story2"></label>
+                    <input type="checkbox" name="story" id="story3" value="3" class="rate_story rate_radio" title="3점">
+                    <label for="story3"></label>
+                    <input type="checkbox" name="story" id="story4" value="4" class="rate_story rate_radio" title="4점">
+                    <label for="story4"></label>
+                    <input type="checkbox" name="story" id="story5" value="5" class="rate_story rate_radio" title="5점">
+                    <label for="story5"></label>
+                  </div>
                 </div>
               </div>
+
             </div>
 
             <div class="col-6">
+
               <!-- 재미 -->
               <div class="py-3 row align-items-center">
                 <label for="story" class="col-4 control-label label-title">재미</label>
                 <div class="col-8">
-                  <input id="funny" name="funny" class="form-control rating rating-loading" data-min="0" data-max="5"
-                    data-step="1" value="">
+                  <div class="rating funny-rating">
+                    <!-- 해당 별점을 클릭하면 해당 별과 그 왼쪽의 모든 별의 체크박스에 checked 적용 -->
+                    <input type="checkbox" name="funny" id="funny1" value="1" class="rate_funny rate_radio" title="1점">
+                    <label for="funny1"></label>
+                    <input type="checkbox" name="funny" id="funny2" value="2" class="rate_funny rate_radio" title="2점">
+                    <label for="funny2"></label>
+                    <input type="checkbox" name="funny" id="funny3" value="3" class="rate_funny rate_radio" title="3점">
+                    <label for="funny3"></label>
+                    <input type="checkbox" name="funny" id="funny4" value="4" class="rate_funny rate_radio" title="4점">
+                    <label for="funny4"></label>
+                    <input type="checkbox" name="funny" id="funny5" value="5" class="rate_funny rate_radio" title="5점">
+                    <label for="funny5"></label>
+                  </div>
                 </div>
               </div>
+
               <!-- 다시 볼 의향 -->
               <div class="py-3 row align-items-center">
                 <label for="story" class="col-4 control-label label-title">다시 볼 의향</label>
                 <div class="col-8">
-                  <input id="watch_again" name="watch_again" class="form-control rating rating-loading" data-min="0"
-                    data-max="5" data-step="1" value="">
+                  <div class="rating wa-rating">
+                    <!-- 해당 별점을 클릭하면 해당 별과 그 왼쪽의 모든 별의 체크박스에 checked 적용 -->
+                    <input type="checkbox" name="wa" id="wa1" value="1" class="rate_wa rate_radio" title="1점">
+                    <label for="wa1"></label>
+                    <input type="checkbox" name="wa" id="wa2" value="2" class="rate_wa rate_radio" title="2점">
+                    <label for="wa2"></label>
+                    <input type="checkbox" name="wa" id="wa3" value="3" class="rate_wa rate_radio" title="3점">
+                    <label for="wa3"></label>
+                    <input type="checkbox" name="wa" id="wa4" value="4" class="rate_wa rate_radio" title="4점">
+                    <label for="wa4"></label>
+                    <input type="checkbox" name="wa" id="wa5" value="5" class="rate_wa rate_radio" title="5점">
+                    <label for="wa5"></label>
+                  </div>
                 </div>
               </div>
+
             </div>
 
           </div>
@@ -136,7 +290,8 @@
         <!-- 리뷰 -->
         <div class="mx-5 mb-4">
           <div class="px-5 form-group row">
-            <textarea id="review_text" name="review_text" class="p-3 form-control" rows="5" placeholder="리뷰를 작성하세요"></textarea>
+            <textarea id="review_text" name="review_text" class="p-3 form-control" rows="5"
+              placeholder="리뷰를 작성하세요"></textarea>
           </div>
         </div>
       </div>
@@ -154,6 +309,8 @@
   </form>
 
   </div>
+
+  <div>아이콘 제작자 <a href="https://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/kr/" title="Flaticon">www.flaticon.com</a></div>
 </body>
 
 </html>

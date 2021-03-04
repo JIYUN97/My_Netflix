@@ -30,9 +30,9 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='review_list.css') }}">
 
   <script>
-
-    $('.hidden-review')
-
+    $('#toggle_{{num}}').click(funtion() {
+      $('#h_review_{{num}}').toggle();
+    });
   </script>
 
 </head>
@@ -90,11 +90,11 @@
               <div class="writer">{{nick}}</div>
               <div class="hashtag">{{hashtag}}</div>
               <div class="btn_toggle">
-                <a href="#" class="fas fa-caret-down"></a>
+                <a id="toggle_{{num}}" href="#" class="fas fa-caret-down"></a>
               </div>
             </div>
 
-            <div class="item hidden-review">
+            <div id="h_review_{{num}}" class="item hidden-review">
               <!-- 별점 -->
               <div class="mx-5 mb-4 px-5 row">
 
@@ -103,8 +103,13 @@
                   <div class="py-3 row align-items-center justify-content-end">
                     <label for="visual" class="col-4 control-label label-title">영상미</label>
                     <div class="col-8">
-                      <input id="visual" name="visual" class="form-control rating rating-loading" data-min="0"
-                        data-max="5" data-step="1" value="">
+                      <p id="star_grade">
+                        <a href="#">★</a>
+                        <a href="#">★</a>
+                        <a href="#">★</a>
+                        <a href="#">★</a>
+                        <a href="#">★</a>
+                      </p>
                     </div>
                   </div>
                   <!-- 스토리 -->
