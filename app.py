@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 SECRET_KEY = 'hanghae_16'
-## client = MongoClient('mongodb://test:test@localhost', 27017)
 client = MongoClient('localhost', 27017)
 db = client.my_netflix
 
