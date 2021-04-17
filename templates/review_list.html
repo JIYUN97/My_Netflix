@@ -81,7 +81,7 @@
           <div class="board_list_head">
             <div class="num">번호</div>
             <div class="writer">글쓴이</div>
-            <div class="hashtag">나만의 해시태그</div>
+            <div class="title">나만의 해시태그</div>
           </div>
 
           <!-- 리뷰 목록 -->
@@ -101,11 +101,14 @@
             <div class="item d-flex justify-content-between">
               <div class="num">{{num}}</div>
               <div class="writer">{{nick}}</div>
-              <div class="hashtag">{{hashtag}}</div>
 
-              <!-- toggle 버튼 -->
-              <div>
-                <button class="more_button" value="{{num}}" onclick="show_detail({{num}})">more</button>
+              <div class="title d-flex justify-content-between">
+                <div class="hashtag">{{hashtag}}</div>
+  
+                <!-- toggle 버튼 -->
+                <div class="btn_toggle">
+                  <button class="more_button" value="{{num}}" onclick="show_detail({{num}})">more</button>
+                </div>
               </div>
             </div>
 
@@ -206,9 +209,9 @@
               <!-- End of 별점 -->
 
               <!-- 리뷰 줄글 -->
-              <div class="review-box">
-                <label for="exampleFormControlTextarea1">&nbsp &nbsp리뷰</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" disabled>{{review_text}}</textarea>
+              <div class="review-box d-flex justify-content-between">
+                <label class="review-title" for="exampleFormControlTextarea1">&nbsp &nbsp리뷰</label>
+                <textarea class="review-text" id="exampleFormControlTextarea1" rows="3" disabled>{{review_text}}</textarea>
               </div>
             </div>
 

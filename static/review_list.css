@@ -1,6 +1,7 @@
 @font-face {
-  font-family: 'MaplestoryOTFBold';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff') format('woff');
+  font-family: "MaplestoryOTFBold";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/MaplestoryOTFBold.woff")
+    format("woff");
   font-weight: normal;
   font-style: normal;
 }
@@ -8,7 +9,7 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: 'MaplestoryOTFBold' !important;
+  font-family: "MaplestoryOTFBold" !important;
 }
 
 a {
@@ -62,16 +63,16 @@ a:hover {
   border-bottom: 1px solid #ccc;
 }
 
-.board_list_head>div {
+.board_list_head > div {
   display: inline-block;
   font-size: 14px;
 }
 
-.board_list_body .item>div {
+.board_list_body .item > div {
   font-size: 14px;
 }
 
-.board_list_head>div {
+.board_list_head > div {
   font-weight: 600;
 }
 
@@ -85,12 +86,23 @@ a:hover {
   text-align: center;
 }
 
+.board_list .title {
+  width: 70%;
+}
+
 .board_list .hashtag {
-  width: 60%;
+  width: 90%;
 }
 
 .board_list .btn_toggle {
   width: 10%;
+}
+
+.more_button,
+.more_button:focus {
+  outline: 0;
+  border: 0;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 .hidden-review {
@@ -123,20 +135,24 @@ a:hover {
   background-image: url('/static/fullstar.png');
 } */
 
-.review-text {
-  width: 80%;
-  border: 1px solid black;
-}
-
-.more_button, .more_button:focus{
-  outline:0;
-  border:0;
-  background-color:rgba(0, 0, 0, 0);
-}
-
 .review-box {
   width: 80%;
   display: block;
   margin: 20px auto;
   overflow: hidden;
+}
+
+.review-title {
+  width: 10%;
+  text-align: center;
+}
+
+.review-text {
+  width: 90%;
+  color: black;
+  font-size: 15px;
+  padding: 10px;
+  background-color: white;
+  border: solid 2px gray;
+  border-radius: 5px;
 }
